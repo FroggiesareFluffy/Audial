@@ -1,0 +1,24 @@
+[Unit]
+Description=Audial Login Manager
+After=systemd-user-sessions.service
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/Desktop/login.py
+
+Type=idle
+Restart=always
+RestartSec=0
+UtmpIdentifier=%I
+TTYPath=/dev/%I
+TTYReset=yes
+StandardInput=tty
+StandardOutput=tty
+TTYVHangup=yes
+TTYVTDisallocate=yes
+KillMode=process
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
+
+[Install]
+Alias=display-manager.service
+WantedBy=graphical.target
