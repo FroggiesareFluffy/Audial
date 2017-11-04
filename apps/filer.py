@@ -7,23 +7,39 @@ from apps.app import App
 class Filer(App):
     def __init__(self, dm, path=None):
         App.__init__(self, dm, "Filer")
+        self.index = 0
+        self.directories = []
+        self.files = []
+        self.items = []
         self.hiding = True
         if path is None:
             path = os.environ["PWD"]
         self.open_directory(path)
 
     def open_directory(self, path):
+        print("Opening {} out of {}".format(self.index, len(self.directories)))
         walk = os.walk(path)
+        self.dm.say("Opening {}".format(self.dm.format_code(os.path.basename(path))))
         self.path, self.directories, self.files = next(walk)
-        self.dm.say("Opening {}".format(self.dm.format_code(os.path.basename(self.path))))
         self.directories.sort()
         self.files.sort()
         self.items = self.directories + self.files
         if self.hiding:
+            self.files = list(filter(lambda x: not x.startswith("."), self.files))
+            self.directories = list(filter(lambda x: not x.startswith("."), self.directories))
             self.items = list(filter(lambda x: not x.startswith("."), self.items))
         self.items = self.items + ["Parent directory"]
         self.index = 0
         self.dm.say(self.items[0])
+
+    def open_file(self, path):
+        ext = os.path.splitext(path)[1]
+        if ext == ".txt":
+            self.dm.open_app("Text Editor", path)
+        elif ext == ".py":
+            self.dm.open_app("Python Editor", path)
+        else:
+            self.dm.say("Unrecognised file")
 
     def key(self, char):
         if char == curses.KEY_UP:
@@ -41,7 +57,7 @@ class Filer(App):
             elif self.index < len(self.directories):
                 self.open_directory(os.path.join(self.path, self.items[self.index]))
             else:
-                self.dm.say("This is a file.")
+                self.open_file(os.path.join(self.path, self.items[self.index]))
 
     def meta(self, char):
         if char == ord("s"):

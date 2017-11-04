@@ -85,12 +85,31 @@ class Desktop(object):
         while self.running:
             self.handle_input()
 
+    def logout(self):
+        self.say("Do you want to log out?")
+        options = ["Don't log out", "Log out"]
+        index = 1
+        while True:
+            self.say(options[index])
+            command = -1
+            while command not in (curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT, META, ord("\t"), ord("\n")):
+                command = self.screen.getch()
+            if command == META:
+                return
+            elif command == ord("\n"):
+                if index == 1:
+                    self.running = False
+                    self.say("Logging out")
+                return
+            else:
+                index = (index + 1) % 2
+
     def handle_input(self):
         char = self.screen.getch()
         if char == META:
             char = self.screen.getch()
             if char == LOGOUT:
-                self.running = False
+                self.logout()
             elif char == MENU:
                 if self.apps[0].has_menu:
                     self.say("Opening {} menu".format(self.apps[0].name))

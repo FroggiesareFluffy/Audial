@@ -1,3 +1,4 @@
 Desktop: apps.desktop Desktop
 Filer: apps.filer Filer
 Text Editor: apps.text TextEditor
+Python Editor: apps.python PythonEditor

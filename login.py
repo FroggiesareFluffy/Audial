@@ -3,6 +3,8 @@
 import sys
 import pam
 import ctypes
+
+sys.stderr = open("error_log.txt")
 import subprocess
 import pwd
 import os
