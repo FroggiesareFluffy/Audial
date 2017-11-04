@@ -36,3 +36,9 @@ There are a few global comands:
 
 There are also a few commands that apps are expected to respond to:
  * `Alt` + `q` will close the app.
+ * `Alt` + `r` should read the surrect selection, if applicable (not in filer or text editor yet)
+ * `Alt` + `s` will save the file, if applicable
+ 
+## Bugs
+
+This is still under development, so bugs and incompleteness are expected. When these are found, either fix it yourself and make a pull request, or report it as an issue and let someone else fix it.
